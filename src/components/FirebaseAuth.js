@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 // import firebase from 'firebase/app'
 import firebase from "firebase/compat/app";
 import {
@@ -17,7 +17,7 @@ export default function FirebaseAuth() {
   const [loginPassword, setLoginPassword] = useState("");
 
   const [user, setUser] = useState({});
-//    console.log(user.email)
+  //    console.log(user.email)
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
@@ -30,17 +30,6 @@ export default function FirebaseAuth() {
         registerPassword
       );
       console.log(response.user.email);
-      if(response.user.email) {
-
-      try {
-        await axios.post(
-          "http://localhost:5000/api/v1/users",
-          { email: response.user.email }
-        );
-      } catch (error) {
-        console.log("error", error);
-      }
-      }
     } catch (error) {
       console.log(error.message);
     }
@@ -48,12 +37,21 @@ export default function FirebaseAuth() {
 
   const login = async () => {
     try {
-      const user = await signInWithEmailAndPassword(
+      const response = await signInWithEmailAndPassword(
         auth,
         loginEmail,
         loginPassword
       );
-      console.log(user);
+      console.log(response);
+      if (response.user.email) {
+        try {
+          await axios.post("http://localhost:5000/api/v1/users", {
+            email: response.user.email,
+          });
+        } catch (error) {
+          console.log("error", error);
+        }
+      }
     } catch (error) {
       console.log(error.message);
     }

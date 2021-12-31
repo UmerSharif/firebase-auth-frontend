@@ -7,8 +7,8 @@ function App() {
        "http://localhost:5000/api/v1/users/google-authenticate",
        { id_token: response.tokenObj.id_token }
      );
-    console.log(response);
-    console.log(res, "response with token")
+    // console.log(response);
+     console.log(res, "response with token")
   };
   return (
     <GoogleLogin

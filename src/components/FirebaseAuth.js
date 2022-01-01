@@ -9,18 +9,24 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase-config";
 import axios from "axios";
+import Users from "./Users";
 
 export default function FirebaseAuth() {
   const [registerEmail, setRegisterEmail] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+  const [idToken, setIdToken]= useState('')
 
   const [user, setUser] = useState({});
-  //    console.log(user.email)
+    // console.log(user)
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
+  useEffect(() => {
+    const idToken = localStorage.getItem("idToken")
+    setIdToken(idToken)
+  }, [])
 
   const register = async () => {
     try {
@@ -47,7 +53,10 @@ export default function FirebaseAuth() {
         try {
           await axios.post("http://localhost:5000/api/v1/users", {
             email: response.user.email,
-          });
+          },{headers: {
+              'Authtoken': response._tokenResponse.idToken
+            }});
+            localStorage.setItem("idToken", response._tokenResponse.idToken);
         } catch (error) {
           console.log("error", error);
         }
@@ -59,9 +68,11 @@ export default function FirebaseAuth() {
 
   const logout = async () => {
     await signOut(auth);
+    localStorage.removeItem('idToken')
   };
 
   return (
+    <>
     <div className="formm">
       <div>
         <h3> Register User </h3>
@@ -104,5 +115,11 @@ export default function FirebaseAuth() {
 
       <button onClick={logout}> Sign Out </button>
     </div>
+    {
+idToken &&
+    <Users/>
+
+    }
+</>
   );
 }

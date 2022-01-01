@@ -3,24 +3,29 @@ import { useEffect,useState } from 'react';
 import axios from 'axios';
 // import GoogleLogin from "react-google-login";
 import FirebaseAuth from './components/FirebaseAuth.js';
+import Users from './components/Users';
 function App() {
-  const [user,setUser] = useState([])
-  console.log(user)
-  // const responseGoogle = async (response) => {
-  //    let res = await axios.post(
-  //      "http://localhost:5000/api/v1/users/google-authenticate",
-  //      { id_token: response.tokenObj.id_token }
-  //    );
-  //   // console.log(response);
-  //    console.log(res, "response with token")
-  // };
-  async function getUser() {
-    const user = await axios.get("http://localhost:5000/api/v1/users");
-    setUser(user.data)
-  }
-  useEffect(() => {
-    getUser()
-  }, [])
+  // const [idToken, setIdToken] = useState("")
+  // useEffect(() => {
+  //   const idToken = localStorage.getItem("idToken");
+  //   setIdToken(idToken)
+  // }, [])
+  // console.log(idToken)
+
+//   async function getUser(idToken) {
+//     const user = await axios.get("http://localhost:5000/api/v1/users", {
+//       headers: {
+//         Authtoken: idToken ? idToken : "",
+//       },
+//     });
+//     console.log(user, "from get");
+//     // setUser(user.data);
+//   }
+//   useEffect(() => {
+// const idToken = localStorage.getItem("idToken");
+//       getUser(idToken);
+
+//   }, []);
 
   return (
     <>
@@ -32,6 +37,9 @@ function App() {
       cookiePolicy={"single_host_origin"}
     /> */}
     <FirebaseAuth />
+    {/* {idToken &&
+    <Users />
+    } */}
 </>
   );
 }
